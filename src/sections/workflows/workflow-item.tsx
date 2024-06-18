@@ -1,38 +1,42 @@
 'use client';
 
-import { useRef } from 'react';
-import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { useRef } from 'react';
 
-import Card from '@mui/material/Card';
-import MenuList from '@mui/material/MenuList';
-import CardContent from '@mui/material/CardContent';
 import {
-  Grow,
-  Stack,
-  Paper,
-  Popper,
-  MenuItem,
-  IconButton,
   CardActions,
   ClickAwayListener,
+  Grow,
+  IconButton,
+  MenuItem,
+  Paper,
+  Popper,
+  Stack,
 } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import MenuList from '@mui/material/MenuList';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { TopActions } from 'src/lib/actions';
+import { ActionStep, TopActions } from 'src/lib/actions';
 
 import { Iconify } from 'src/components/iconify';
 
 type Props = {
-  item: { title: string; id: string };
+  item: ActionStep;
+  isDraggable: boolean;
+  variant?: 'default' | 'rounded';
+  onAdd?: (order: number, action?: string | null) => void;
 };
 
-const WorkflowItem: React.FC<Props> = ({ item }: Props) => {
+const WorkflowItem: React.FC<Props> = ({ item, isDraggable, onAdd }: Props) => {
   const anchorRef = useRef<HTMLButtonElement>(null);
   const openMenu = useBoolean();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: item.id,
+    disabled: !isDraggable,
   });
 
   const style = {
@@ -42,7 +46,6 @@ const WorkflowItem: React.FC<Props> = ({ item }: Props) => {
     bgcolor: 'background.neutral',
   };
   const handleToggle = () => {
-    console.log('entered here>>>');
     openMenu.onTrue();
   };
 
@@ -62,36 +65,17 @@ const WorkflowItem: React.FC<Props> = ({ item }: Props) => {
     }
   };
 
-  /* 
-  {
-    <AnimatePresence>
-          {shadow.value && (
-            <m.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Skeleton
-                sx={{
-                  width: '100%',
-                  height: '128px',
-                  bgcolor: 'background.paper',
-                }}
-              />
-            </m.div>
-          )}
-        </AnimatePresence>
-  }
- */
   return (
     <>
       <Card ref={setNodeRef} sx={style} {...attributes}>
-        <CardContent {...listeners} sx={{ cursor: 'move' }}>
-          {item.title}
+        <CardContent
+          {...(isDraggable ? listeners : {})}
+          sx={{ cursor: isDraggable ? 'move' : 'default' }}
+        >
+          {item.name}
         </CardContent>
 
-        <CardActions>asd</CardActions>
+        <CardActions>{item.description}</CardActions>
       </Card>
       <Stack spacing={4} direction="row" justifyContent="center" sx={{ width: '100%' }}>
         <IconButton ref={anchorRef} onClick={handleToggle}>
@@ -119,10 +103,12 @@ const WorkflowItem: React.FC<Props> = ({ item }: Props) => {
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
-                    {TopActions.map((action) => (
-                      <MenuItem key={action}>{action}</MenuItem>
+                    {TopActions.map((action, index) => (
+                      <MenuItem key={action} onClick={() => onAdd?.(index, action)}>
+                        {action}
+                      </MenuItem>
                     ))}
-                    <MenuItem>More...</MenuItem>
+                    <MenuItem onClick={() => onAdd?.(TopActions.length - 1)}>More...</MenuItem>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

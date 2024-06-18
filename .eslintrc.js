@@ -4,7 +4,7 @@
 module.exports = {
   root: true,
   env: { browser: true, es2020: true },
-  plugins: ['perfectionist', 'unused-imports', '@typescript-eslint', 'prettier'],
+  plugins: ['unused-imports', '@typescript-eslint', 'prettier'],
   extends: ['airbnb', 'airbnb-typescript', 'airbnb/hooks', 'prettier'],
   parserOptions: {
     sourceType: 'module',
@@ -36,6 +36,7 @@ module.exports = {
     'no-restricted-exports': 0,
     'no-promise-executor-return': 0,
     'import/prefer-default-export': 0,
+    'import/no-extraneous-dependencies': 0,
     'prefer-destructuring': [1, { object: true, array: false }],
     // typescript
     '@typescript-eslint/naming-convention': 0,

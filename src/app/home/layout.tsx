@@ -1,6 +1,4 @@
-'use client';
-
-import { SimpleLayout } from 'src/layouts/simple';
+import { MainLayout } from 'src/layouts/main';
 
 // ----------------------------------------------------------------------
 
@@ -9,5 +7,5 @@ type Props = {
 };
 
 export default function Layout({ children }: Props) {
-  return <SimpleLayout content={{ compact: false }}>{children}</SimpleLayout>;
+  return <MainLayout>{children}</MainLayout>;
 }

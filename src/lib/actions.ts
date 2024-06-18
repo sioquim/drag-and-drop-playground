@@ -12,6 +12,20 @@ const COLLECT_FEEDBACK = 'Collect Feedback';
 const VERIFY_INFORMATION = 'Verify Information';
 const FOLLOW_UP = 'Follow-Up';
 
+export type InsertActionStep = {
+  name: string;
+  description: string;
+  order: number | null;
+  metadata: any;
+};
+
+export type ActionStep = {
+  id: string;
+  name: string;
+  description: string;
+  order: number | null;
+  metadata: any;
+};
 // Define the type for actions using the constants
 type Action =
   | typeof REQUEST_INFO
