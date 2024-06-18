@@ -30,7 +30,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useVapiSession } from 'src/hooks/use-vapi-session';
 
 import { addSteps, getStepsBySessionKey } from 'src/actions/steps';
-import { ActionStep, InsertActionStep } from 'src/lib/actions';
+import { Action, ActionStep, InsertActionStep } from 'src/lib/actions';
 import ReservedWorkflowItem from './reserved-work-item';
 import WorkflowItem from './workflow-item';
 
@@ -39,6 +39,7 @@ export function WorkflowsView() {
   const [steps, setSteps] = useState<ActionStep[]>([]);
   console.log('🚀 ~ WorkflowsView ~ steps:', steps);
   const [activeStep, setActiveStep] = useState<ActionStep | null>(null);
+  const [displayStep, setDisplayStep] = useState<ActionStep | null>(null);
 
   useEffect(() => {
     const initialiseSteps = async (key: string) => {
@@ -94,6 +95,11 @@ export function WorkflowsView() {
     }
   };
 
+  useEffect(() => {
+    if (activeStep) {
+      setDisplayStep(activeStep);
+    }
+  }, [activeStep]);
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     console.log('🚀 ~ handleDragEnd ~ over:', over);
@@ -115,11 +121,12 @@ export function WorkflowsView() {
     if (sessionId) {
       const newStep: InsertActionStep = {
         name: stepName || `Step ${steps.length + 1}`,
+        type: (stepName as Action) || undefined,
         description: 'Description of the new step',
         order: order + 0.5,
         metadata: {},
       };
-      const updatedSteps = await addSteps(sessionId, [newStep], '/');
+      const updatedSteps: ActionStep[] = await addSteps(sessionId, [newStep], '/');
       setSteps(updatedSteps);
     }
   };
@@ -209,7 +216,7 @@ export function WorkflowsView() {
             </DragOverlay>
           </Container>
         </Grid>
-        <Grid xs={4}>test</Grid>
+        <Grid xs={4}>{displayStep?.name}</Grid>
       </Grid>
     </DndContext>
   );

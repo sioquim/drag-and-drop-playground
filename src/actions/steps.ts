@@ -10,7 +10,7 @@ export const addSteps = async (
   sessionKey: string,
   payload: InsertActionStep[],
   revalidatePath?: string
-) => {
+): Promise<ActionStep[]> => {
   // Retrieve the existing steps
   const currentSteps = ((await getStepsBySessionKey(sessionKey)) as ActionStep[]) || [];
 
@@ -28,7 +28,7 @@ export const addSteps = async (
 
   // Normalize the order values
   let previousOrder = -1;
-  const normalizedSteps = sortedSteps.map((step, index) => {
+  const normalizedSteps: ActionStep[] = sortedSteps.map((step, index) => {
     if (step.order !== null && step.order! <= previousOrder) {
       step.order = previousOrder + 1;
     }

@@ -14,6 +14,7 @@ const FOLLOW_UP = 'Follow-Up';
 
 export type InsertActionStep = {
   name: string;
+  type?: Action;
   description: string;
   order: number | null;
   metadata: any;
@@ -22,12 +23,13 @@ export type InsertActionStep = {
 export type ActionStep = {
   id: string;
   name: string;
+  type?: Action;
   description: string;
   order: number | null;
   metadata: any;
 };
 // Define the type for actions using the constants
-type Action =
+export type Action =
   | typeof REQUEST_INFO
   | typeof EVALUATE_INFO
   | typeof PROVIDE_OPTIONS
