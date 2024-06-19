@@ -15,7 +15,7 @@ export type ActionStepSchemaType = zod.infer<typeof ActionStepSchema>;
 
 export const ActionStepSchema = zod.object({
   name: zod.string().min(1, { message: 'Please enter the step name' }),
-  description: zod.string().min(1, { message: 'Please enter the description' }),
+  prompt: zod.string().min(1, { message: 'Please enter instructions' }),
 });
 
 // ----------------------------------------------------------------------
@@ -26,7 +26,7 @@ export function WorkflowSettings() {
   console.log('🚀 ~ WorkflowSettings ~ settings:', settings);
   const defaultValues = {
     name: settings?.name ?? '',
-    description: settings?.description ?? '',
+    prompt: settings?.prompt ?? '',
   };
 
   const methods = useForm<ActionStepSchemaType>({
@@ -44,10 +44,7 @@ export function WorkflowSettings() {
 
   useEffect(() => {
     const currentValues = getValues();
-    if (
-      currentValues.name !== settings?.name ||
-      currentValues.description !== settings?.description
-    ) {
+    if (currentValues.name !== settings?.name || currentValues.prompt !== settings?.prompt) {
       reset(defaultValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,8 +68,8 @@ export function WorkflowSettings() {
           <Field.Text name="name" />
         </Stack>
         <Stack spacing={1}>
-          <Typography variant="body2">Description</Typography>
-          <Field.Text name="description" multiline rows={4} />
+          <Typography variant="body2">System Prompt</Typography>
+          <Field.Text name="prompt" multiline rows={4} />
         </Stack>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <LoadingButton type="submit" variant="contained" loading={isSubmitting} color="primary">
