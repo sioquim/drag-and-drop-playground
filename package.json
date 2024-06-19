@@ -78,6 +78,7 @@
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-resources-to-backend": "^1.2.1",
     "immutability-helper": "^3.1.1",
+    "json-beautify": "^1.1.1",
     "lowlight": "^3.1.0",
     "mapbox-gl": "^3.4.0",
     "mui-one-time-password-input": "^2.0.2",

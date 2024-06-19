@@ -2,38 +2,29 @@
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useRef } from 'react';
+import { useRef, useContext } from 'react';
 
-import {
-  CardActions,
-  ClickAwayListener,
-  Grow,
-  IconButton,
-  MenuItem,
-  Paper,
-  Popper,
-  Stack,
-} from '@mui/material';
+import { Stack, IconButton, Typography } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import MenuList from '@mui/material/MenuList';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
-import { ActionStep, TopActions } from 'src/lib/actions';
+import { getActionIcon, type ActionStep } from 'src/lib/actions';
 
 import { Iconify } from 'src/components/iconify';
+import type { WorkflowContextProps } from 'src/components/workflow/context';
+import { WorkflowContext } from 'src/components/workflow/context';
 
 type Props = {
   item: ActionStep;
   isDraggable: boolean;
   variant?: 'default' | 'rounded';
-  onAdd?: (order: number, action?: string | null) => void;
+  onAdd?: (referenceStepId: string, action?: string | null) => void;
 };
 
 const WorkflowItem: React.FC<Props> = ({ item, isDraggable, onAdd }: Props) => {
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const openMenu = useBoolean();
+  const workflowContext = useContext(WorkflowContext);
+  const { selectedStep } = workflowContext as WorkflowContextProps;
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: item.id,
     disabled: !isDraggable,
@@ -45,43 +36,44 @@ const WorkflowItem: React.FC<Props> = ({ item, isDraggable, onAdd }: Props) => {
     opacity: isDragging ? '0.5' : 1,
     bgcolor: 'background.neutral',
   };
-  const handleToggle = () => {
-    openMenu.onTrue();
-  };
-
-  const handleClose = (event: Event | React.SyntheticEvent) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
-      return;
-    }
-
-    openMenu.onFalse();
-  };
-  const handleListKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      openMenu.onFalse();
-    } else if (event.key === 'Escape') {
-      openMenu.onFalse();
-    }
+  const handleAdd = () => {
+    onAdd?.(item.id, null);
   };
 
   return (
     <>
-      <Card ref={setNodeRef} sx={style} {...attributes}>
-        <CardContent
-          {...(isDraggable ? listeners : {})}
-          sx={{ cursor: isDraggable ? 'move' : 'default' }}
-        >
-          {item.name}
+      <Card
+        ref={setNodeRef}
+        {...attributes}
+        {...(isDraggable ? listeners : {})}
+        sx={{
+          ...style,
+          cursor: isDraggable ? 'move' : 'default',
+          border: (theme) =>
+            selectedStep?.id === item.id ? `1px solid ${theme.palette.divider}` : undefined,
+          bgcolor: (theme) =>
+            selectedStep?.id === item.id ? theme.palette.primary.dark : undefined,
+        }}
+      >
+        <CardContent sx={{ p: 2 }}>
+          <Stack direction="row" spacing={2} alignItems="center">
+            {item.type && (
+              <Iconify width={24} icon={getActionIcon(item.type)} color="text.secondary" />
+            )}
+            <Stack>
+              <Typography variant="caption">{item.name}</Typography>
+              <Typography variant="caption" color="text.secondary">
+                {item.type}
+              </Typography>
+            </Stack>
+          </Stack>
         </CardContent>
-
-        <CardActions>{item.description}</CardActions>
       </Card>
       <Stack spacing={4} direction="row" justifyContent="center" sx={{ width: '100%' }}>
-        <IconButton ref={anchorRef} onClick={handleToggle}>
+        <IconButton ref={anchorRef} onClick={handleAdd}>
           <Iconify icon="solar:add-circle-line-duotone" width={24} />
         </IconButton>
-        <Popper
+        {/*  <Popper
           open={openMenu.value}
           anchorEl={anchorRef.current}
           role={undefined}
@@ -114,7 +106,7 @@ const WorkflowItem: React.FC<Props> = ({ item, isDraggable, onAdd }: Props) => {
               </Paper>
             </Grow>
           )}
-        </Popper>
+        </Popper> */}
       </Stack>
     </>
   );

@@ -42,7 +42,7 @@ const WorkflowItems: React.FC<Props> = ({ items }: Props) => {
         <TabPanel value="settings">Settings</TabPanel>
         <TabPanel value="actions">
           <Card>
-            <CardHeader title="Request Info" />
+            <CardHeader title="Collect Info" />
             <CardContent>Work</CardContent>
 
             <CardActions>

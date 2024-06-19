@@ -1,6 +1,6 @@
 // Define action name constants
-const REQUEST_INFO = 'Request Info';
-const EVALUATE_INFO = 'Evaluate Info';
+const REQUEST_INFO = 'Collect Info';
+const EVALUATE_INFO = 'Evaluate & Trigger';
 const PROVIDE_OPTIONS = 'Provide Options';
 const CONFIRMATION = 'Confirmation';
 const HTTP_REQUEST = 'HTTP Request';
@@ -25,7 +25,6 @@ export type ActionStep = {
   name: string;
   type?: Action;
   description: string;
-  order: number | null;
   metadata: any;
 };
 // Define the type for actions using the constants
@@ -60,7 +59,7 @@ export const Actions: Action[] = [
 ];
 
 // Top 5 most common actions
-export const TopActions: Action[] = [REQUEST_INFO, HTTP_REQUEST, END_CALL];
+export const TopActions: Action[] = [REQUEST_INFO, HTTP_REQUEST];
 
 // Example function to get the description of an action
 export const getActionDescription = (action: Action): string => {
@@ -77,6 +76,24 @@ export const getActionDescription = (action: Action): string => {
     [COLLECT_FEEDBACK]: 'Collect feedback from the user',
     [VERIFY_INFORMATION]: 'Verify the provided information',
     [FOLLOW_UP]: 'Schedule or perform follow-up actions',
+  };
+  return descriptions[action];
+};
+
+export const getActionIcon = (action: Action): string => {
+  const descriptions: Record<Action, string> = {
+    [REQUEST_INFO]: 'solar:info-circle-linear',
+    [EVALUATE_INFO]: 'solar:lightbulb-bolt-outline',
+    [PROVIDE_OPTIONS]: 'carbon:choices',
+    [CONFIRMATION]: 'carbon:checkmark-outline',
+    [HTTP_REQUEST]: 'carbon:send-alt',
+    [FORWARD_CALLS]: 'solar:outgoing-call-linear',
+    [END_CALL]: 'solar:end-call-rounded-linear',
+    [TRIGGER_WORKFLOW]: 'hugeicons:workflow-circle-01',
+    [HANDLE_SPECIAL_CONDITIONS]: 'carbon:warning-alt',
+    [COLLECT_FEEDBACK]: 'fluent:person-feedback-24-regular',
+    [VERIFY_INFORMATION]: 'carbon:certificate-check',
+    [FOLLOW_UP]: 'carbon:reminder-medical',
   };
   return descriptions[action];
 };
