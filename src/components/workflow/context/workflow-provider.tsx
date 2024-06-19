@@ -24,7 +24,7 @@ export const WorkflowProvider = ({
   children,
   sessionKey,
 }: { children: ReactNode } & { sessionKey: string | null }) => {
-  const [settings, setSettings] = useState<Settings>({ name: '', description: '' });
+  const [settings, setSettings] = useState<Settings>({ name: '', prompt: '' });
   const [steps, setSteps] = useState<ActionStep[]>([]);
   const [selectedStep, setSelectedStep] = useState<ActionStep | null>(null);
 
@@ -33,7 +33,7 @@ export const WorkflowProvider = ({
   }, []);
 
   useEffect(() => {
-    if (settings.name || settings.description) {
+    if (settings.name || settings.prompt) {
       syncSettings(settings);
     }
   }, [settings, syncSettings]);
@@ -41,10 +41,10 @@ export const WorkflowProvider = ({
   useEffect(() => {
     const initialiseSettings = async () => {
       const kvSettings = await getSettings();
-      if (!kvSettings?.name && !kvSettings?.description) {
+      if (!kvSettings?.name && !kvSettings?.prompt) {
         const newSettings = {
           name: 'New Workflow',
-          description: 'Tell something about this workflow',
+          prompt: '',
         };
         setSettings(newSettings);
       } else {
