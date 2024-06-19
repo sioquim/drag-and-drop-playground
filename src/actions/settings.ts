@@ -6,7 +6,7 @@ import { revalidatePath as nextRevalidatePath } from 'next/cache';
 
 export type Settings = {
   name: string;
-  description: string;
+  prompt: string;
 };
 export const saveSettings = async (
   settings: Settings,

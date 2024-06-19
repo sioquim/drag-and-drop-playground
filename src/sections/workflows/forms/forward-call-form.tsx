@@ -21,15 +21,9 @@ export type ActionStepSchemaType = zod.infer<typeof ActionStepSchema>;
 
 export const ActionStepSchema = zod.object({
   name: zod.string().min(1, { message: 'Please enter the step name' }),
-  phone: zod.string().refine(
-    (value) => {
-      console.log('value', value);
-      return isValidPhoneNumber(value) || isEmergencyNumber(value);
-    },
-    {
-      message: 'Please enter a valid phone number',
-    }
-  ),
+  phone: zod.string().refine((value) => isValidPhoneNumber(value) || isEmergencyNumber(value), {
+    message: 'Please enter a valid phone number',
+  }),
 });
 
 type Props = {

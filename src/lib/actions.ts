@@ -9,7 +9,6 @@ const END_CALL = 'End Call';
 const TRIGGER_WORKFLOW = 'Trigger Workflow';
 const HANDLE_SPECIAL_CONDITIONS = 'Handle Special Conditions';
 const COLLECT_FEEDBACK = 'Collect Feedback';
-const VERIFY_INFORMATION = 'Verify Information';
 const FOLLOW_UP = 'Follow-Up';
 
 export type InsertActionStep = {
@@ -39,7 +38,6 @@ export type Action =
   | typeof TRIGGER_WORKFLOW
   | typeof HANDLE_SPECIAL_CONDITIONS
   | typeof COLLECT_FEEDBACK
-  | typeof VERIFY_INFORMATION
   | typeof FOLLOW_UP;
 
 // Complete list of actions
@@ -54,7 +52,6 @@ export const Actions: Action[] = [
   TRIGGER_WORKFLOW,
   HANDLE_SPECIAL_CONDITIONS,
   COLLECT_FEEDBACK,
-  VERIFY_INFORMATION,
   FOLLOW_UP,
 ];
 
@@ -74,7 +71,6 @@ export const getActionDescription = (action: Action): string => {
     [TRIGGER_WORKFLOW]: 'Trigger a follow-up workflow',
     [HANDLE_SPECIAL_CONDITIONS]: 'Handle any special conditions or emergencies',
     [COLLECT_FEEDBACK]: 'Collect feedback from the user',
-    [VERIFY_INFORMATION]: 'Verify the provided information',
     [FOLLOW_UP]: 'Schedule or perform follow-up actions',
   };
   return descriptions[action];
@@ -92,7 +88,6 @@ export const getActionIcon = (action: Action): string => {
     [TRIGGER_WORKFLOW]: 'hugeicons:workflow-circle-01',
     [HANDLE_SPECIAL_CONDITIONS]: 'carbon:warning-alt',
     [COLLECT_FEEDBACK]: 'fluent:person-feedback-24-regular',
-    [VERIFY_INFORMATION]: 'carbon:certificate-check',
     [FOLLOW_UP]: 'carbon:reminder-medical',
   };
   return descriptions[action];
